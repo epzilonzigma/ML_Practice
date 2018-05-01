@@ -25,6 +25,8 @@ with open('C:/Users/Tony Cai/Documents/Ad Prediction/train.csv', 'r') as csvfile
             continue
         else:
             data = data.append(pd.Series(row, index=headings), ignore_index=True)
+
+end = time.time()
         
 #data = pd.read_csv('C:/Users/Tony Cai/Documents/Ad Prediction/train.csv',header=0)
 
