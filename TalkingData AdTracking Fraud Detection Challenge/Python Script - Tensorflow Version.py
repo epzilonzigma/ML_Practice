@@ -6,10 +6,11 @@ import pandas as pd
 from sklearn.cross_validation import train_test_split
 import tensorflow as tf
 
-<<<<<<< HEAD
 =======
 #create empty pandas dataframe to read CSV
 >>>>>>> 7fc9b72793030de1e0f015b882bd81417ca855ed
+#create empty dataframe
+
 headings = ['ip', 'app','device', 'os', 'channel', 'click_time', 'attributed_time', 'is_attributed']
 data = pd.DataFrame(columns = headings)
 
