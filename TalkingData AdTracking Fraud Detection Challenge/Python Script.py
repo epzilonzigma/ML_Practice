@@ -16,7 +16,7 @@ from sklearn.cross_validation import train_test_split
 headings = ['ip', 'app','device', 'os', 'channel', 'click_time', 'attributed_time', 'is_attributed']
 data = pd.DataFrame(columns = headings)
 
-#read training data csv, append each row
+#read training data csv, append each row to pandas dataframe
 
 with open('C:/Users/Tony Cai/Documents/Ad Prediction/train.csv', 'r') as csvfile:
     dataset = csv.reader(csvfile)
