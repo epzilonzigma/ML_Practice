@@ -1,16 +1,32 @@
 #Logistic model on Ad Purchase Conversions
+#This is to create a logistics learning model on whether a user will download the advertised app after clicking into the ad
+#In this version, we will estimate the model using Scikit-Learn
 
 import time
 start = time.time()
 
 ##############
 
+import csv
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.cross_validation import train_test_split
 
-#read data file
-data = pd.read_csv('C:/Users/Tony Cai/Documents/Ad Prediction/train.csv',header=0)
+#create empty pandas dataframe to read CSV
+headings = ['ip', 'app','device', 'os', 'channel', 'click_time', 'attributed_time', 'is_attributed']
+data = pd.DataFrame(columns = headings)
+
+#read training data csv, append each row
+
+with open('C:/Users/Tony Cai/Documents/Ad Prediction/train.csv', 'r') as csvfile:
+    dataset = csv.reader(csvfile)
+    for row in dataset:
+        if row[0] == "ip":
+            continue
+        else:
+            data = data.append(pd.Series(row, index=headings), ignore_index=True)
+        
+#data = pd.read_csv('C:/Users/Tony Cai/Documents/Ad Prediction/train.csv',header=0)
 
 #Creating Year, Month and Day Columns
 data['Year2'] = data['click_time'].str[:4]
