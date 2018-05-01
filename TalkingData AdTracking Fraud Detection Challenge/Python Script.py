@@ -2,33 +2,21 @@
 #This is to create a logistics learning model on whether a user will download the advertised app after clicking into the ad
 #In this version, we will estimate the model using Scikit-Learn
 
-import time
-start = time.time()
-
 ##############
 
-import csv
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.cross_validation import train_test_split
 
-#create empty pandas dataframe to read CSV
-headings = ['ip', 'app','device', 'os', 'channel', 'click_time', 'attributed_time', 'is_attributed']
-data = pd.DataFrame(columns = headings)
+#load training dataset at 300,000 rows at a time
 
-#read training data csv, append each row to pandas dataframe
+CHUNKSIZE = 300000
+reader = pd.read_csv('C:/Users/Tony Cai/Documents/Ad Prediction/train.csv', header=0, engine='c', chunksize=CHUNKSIZE)
 
-with open('C:/Users/Tony Cai/Documents/Ad Prediction/train.csv', 'r') as csvfile:
-    dataset = csv.reader(csvfile)
-    for row in dataset:
-        if row[0] == "ip":
-            continue
-        else:
-            data = data.append(pd.Series(row, index=headings), ignore_index=True)
+data = pd.DataFrame()
 
-end = time.time()
-        
-#data = pd.read_csv('C:/Users/Tony Cai/Documents/Ad Prediction/train.csv',header=0)
+for chunk in reader:
+    data = data.append(chunk)
 
 #Creating Year, Month and Day Columns
 data['Year2'] = data['click_time'].str[:4]
@@ -90,9 +78,48 @@ model_param = coefficients.mean(axis=0)
 
 print(model_param)
 
-##########
+#########
 
-end = time.time()
-print(end-start)
+#Prediction of Test data
+
+#load test data at 300,000 rows at a time
+
+test_reader = pd.read_csv('C:/Users/Tony Cai/Documents/Ad Prediction/train.csv', header=0, engine='c', chunksize=CHUNKSIZE)
+
+test_data = pd.DataFrame()
+
+for chunk in test_reader:
+    test_data = test_data.append(chunk)
+
+#Creating Year, Month and Day Columns
+test_data['Year2'] = test_data['click_time'].str[:4]
+test_data['Month2'] = test_data['click_time'].str[5:7]
+test_data['Day2'] = test_data['click_time'].str[8:10]
+test_data['hour2'] = test_data['click_time'].str[11:13]
+test_data['minute2'] = test_data['click_time'].str[14:16]
+test_data['second2'] = test_data['click_time'].str[17:19]
+
+#Delete click time and attributed time columns 
+del test_data['click_time']
+
+#Turn year, month and day columns from str to int
+test_data['Year']=test_data['Year2'].astype(int)*1
+test_data['Month']=test_data['Month2'].astype(int)*1
+test_data['Day']=test_data['Day2'].astype(int)*1
+test_data['Hour']=test_data['hour2'].astype(int)*1
+test_data['Minute']=test_data['minute2'].astype(int)*1
+test_data['Second']=test_data['second2'].astype(int)*1
+del test_data['Year2']
+del test_data['Month2']
+del test_data['hour2']
+del test_data['Day2']
+del test_data['minute2']
+del test_data['second2']
+
+#Overview of size of dataframe
+print(test_data.shape)
+print(list(test_data.columns))
+
+
 
 
