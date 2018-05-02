@@ -5,6 +5,7 @@
 
 ##############
 
+import csv
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
@@ -154,6 +155,12 @@ pred = pd.DataFrame(predicted, columns = ['is_attributed'])
 results = pd.concat([click_id, pred], axis = 1)
 
 
+#Publish results as CSV
+
+with open('C:/Users/Tony Cai/Documents/Ad Prediction/submission.csv','w') as output:
+    writer = csv.writer(output, lineterminator='\n')
+    writer.writerows([['click_id','is_attributed']])
+    writer.writerows(results.values)
     
 
 
