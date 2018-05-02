@@ -4,6 +4,7 @@
 
 ##############
 
+import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.cross_validation import train_test_split
@@ -57,9 +58,12 @@ X_cols = ['ip', 'app', 'device', 'os', 'channel', 'Day', 'Hour', 'Minute', 'Seco
 
 #Create an array to house coefficients
 coefficients = pd.DataFrame(columns = X_cols)
+intercepts = pd.DataFrame(columns = ['intercept'])
 
 #Estimate model parameters by repeatedly randomly sampling 80% of training set to estimate model and average out resulting parameters 
-for i in range(1, 5):
+simulation_iterations = 10
+
+for i in range(1, simulation_iterations+1):
     
     #split training set by 70% train and 30% validation
     train, test = train_test_split(data, test_size=0.3)
@@ -72,9 +76,13 @@ for i in range(1, 5):
     
     #collecting/storing model parameters
     coefficients = coefficients.append(pd.DataFrame(logreg.coef_, columns = X_cols), ignore_index=True)
+    intercepts = intercepts.append(pd.DataFrame(logreg.intercep_, columns = ['intercept']), ignore_index=True)
 
 #Estimating parameters for the model by averaging the coefficients from repeated testing
 model_param = coefficients.mean(axis=0)
+intercept = float(intercepts.mean(axis=0))
+
+param = tuple(model_param)
 
 print(model_param)
 
@@ -82,9 +90,14 @@ print(model_param)
 
 #Prediction of Test data
 
+#Define Logistic Function for prediction
+
+def logit(z):
+    return 1/(1+np.exp(-1*z))
+
 #load test data at 300,000 rows at a time
 
-test_reader = pd.read_csv('C:/Users/Tony Cai/Documents/Ad Prediction/train.csv', header=0, engine='c', chunksize=CHUNKSIZE)
+test_reader = pd.read_csv('C:/Users/Tony Cai/Documents/Ad Prediction/test.csv', header=0, engine='c', chunksize=CHUNKSIZE)
 
 test_data = pd.DataFrame()
 
@@ -116,10 +129,20 @@ del test_data['Day2']
 del test_data['minute2']
 del test_data['second2']
 
-#Overview of size of dataframe
-print(test_data.shape)
-print(list(test_data.columns))
+#Create dataframe to store predicted values
+
+pred = pd.DataFrame()
+
+#Create an matrix for test inputs
+test_input = np.asmatrix(test_data[X_cols].values)
+
+#Calculation of predicted values
+z = np.add(np.matmul(test_input, param),intercept)
+predicted_values = logit(z)
 
 
+
+
+    
 
 
