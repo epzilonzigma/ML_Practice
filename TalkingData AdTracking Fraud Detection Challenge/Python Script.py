@@ -1,6 +1,7 @@
 #Logistic model on Ad Purchase Conversions
 #This is to create a logistics learning model on whether a user will download the advertised app after clicking into the ad
 #In this version, we will estimate the model using Scikit-Learn
+#Date parsing coding contributed by Jason Ip (not owner) 
 
 ##############
 
@@ -140,7 +141,17 @@ test_input = np.asmatrix(test_data[X_cols].values)
 z = np.add(np.matmul(test_input, param),intercept)
 predicted_values = logit(z)
 
+#create submission file
 
+#create results array
+click_id = pd.DataFrame(test_data['click_id'], columns = ['click_id'])
+
+predicted_values = predicted_values.transpose(1,0)
+predicted_values = np.asarray(predicted_values)
+predicted = np.asarray(tuple(predicted_values))
+pred = pd.DataFrame(predicted, columns = ['is_attributed'])
+
+results = pd.concat([click_id, pred], axis = 1)
 
 
     
