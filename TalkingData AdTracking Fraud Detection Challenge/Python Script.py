@@ -78,7 +78,7 @@ for i in range(1, simulation_iterations+1):
     
     #collecting/storing model parameters
     coefficients = coefficients.append(pd.DataFrame(logreg.coef_, columns = X_cols), ignore_index=True)
-    intercepts = intercepts.append(pd.DataFrame(logreg.intercep_, columns = ['intercept']), ignore_index=True)
+    intercepts = intercepts.append(pd.DataFrame(logreg.intercept_, columns = ['intercept']), ignore_index=True)
 
 #Estimating parameters for the model by averaging the coefficients from repeated testing
 model_param = coefficients.mean(axis=0)
