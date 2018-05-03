@@ -79,11 +79,72 @@ def load_data(demo = True, train_size = 70000, test_size = 3000, chunk = 50000):
     
 if __name__ == '__main__':
     
+    #load data
     Xtr, Ytr, Xte, Yte = load_data(demo = True)
     
+    temp = Ytr.shape
+    Ytr = Ytr.reshape(temp[0],1)
+    temp = Yte.shape
+    Yte = Yte.reshape(temp[0],1)
+    
     #Variables Setup
-    x = tf.placeholder(tf.float32, [None, 12])
+    x = tf.placeholder(tf.float32, [None, 9])
     y = tf.placeholder(tf.float32, [None, 1])
     
+    #Weights Setup
+    w = tf.Variable(tf.zeros([9,1]))
+    b = tf.Variable(tf.zeros([1]))
+    
+    #Setup prediction function/calculations
+    def linearfn(X, w, b):
+        z = tf.add(tf.matmul(X,w),b)
+        return z
+    
+    zzz = linearfn(x, w, b)
+    y_hat = tf.sigmoid(zzz)
+    
+    #setting up loss/cost function
+    entropy = tf.nn.sigmoid_cross_entropy_with_logits(labels=y, logits=y_hat)
+    loss = tf.reduce_mean(entropy)
+    
+    #hyperparameter setup
+    
+    learning_rate = 0.0001
+    total_epochs = 500
+    
+    #implement gradient descent with learning rate of 0.01
+    train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(entropy)
+    
+    
+    #initializer
+    
+    init = tf.global_variables_initializer()
+    
+    #running the session
+    
+    with tf.Session() as sess:
+        
+        #initialize all variables
+        sess.run(init)
+        
+        #training model
+        
+        print('training...')
+        
+        for epochs in range(total_epochs):
+            batch_x, batch_y = Xtr, Ytr
+            feed = {x: batch_x, y: batch_y}
+            sess.run([train_step,entropy],feed)
+            
+        var = tf.abs((y-y_hat))
+        accuracy = tf.reduce_mean(tf.cast(var, tf.float32))
+        print("Accuracy", accuracy.eval({x:Xte, y:Yte}))
+        
+        
+        
 
+
+                
+            
+    
 
