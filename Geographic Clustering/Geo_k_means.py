@@ -81,7 +81,7 @@ class GKMeans:
         
         return group_ids
     
-    
+    #initializes classes along with running the assignment algorithm
     
     def __init__(self, latlong, centers, init = None, n = 100, radius = 6371):
         self.latlong = latlong
