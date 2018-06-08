@@ -124,7 +124,7 @@ if __name__ == "__main__":
     #in full data
     plt.figure(figsize=(13, 8.5), edgecolor='white', frameon = 0)
     plt.hist([train_data['volume'],train_data['annualized_volume']], bins = bins, color = ['C0', 'C2'], label = ['Sales Volume','Annualized Sales Volume'])
-    plt.plot([SPPD,SPPD],[0,700],'k-', color='C7')
+    plt.plot([SPPD,SPPD],[0,700],'k-', color='C7', linestyle = ':')
     plt.plot([annualized_SPPD,annualized_SPPD],[0,700],'k-',color='k', lw=3)
     plt.legend(loc='upper right', fontsize=20)
     plt.xlabel('Volume', fontsize=24)
@@ -137,7 +137,7 @@ if __name__ == "__main__":
     #in training set used for modeling
     plt.figure(figsize=(13, 8.5), edgecolor='white', frameon = 0)
     plt.hist([train['volume'],train['annualized_volume']],color=['C0','C2'], bins = bins, label = ['Sales Volume','Annualized Sales Volume'])
-    plt.plot([train_SPPD,train_SPPD],[0,500],'k-',color='C7')
+    plt.plot([train_SPPD,train_SPPD],[0,500],'k-',color='C7', linestyle = ':')
     plt.plot([train_annualized_SPPD,train_annualized_SPPD],[0,500],'k-',color='k',lw=3)
     plt.legend(loc='upper right', fontsize=20)
     plt.xlabel('Volume', fontsize=24)
